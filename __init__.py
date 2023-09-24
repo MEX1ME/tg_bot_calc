@@ -24,7 +24,7 @@ def index():
         if callback_data is not None:
             if len(memory[chat_id]) == 1:
                 memory[chat_id].append(callback_data)
-            else:
+            else:  # если снова нажали на кнопку калькулятора
                 memory[chat_id][1] = callback_data
             if len(memory[chat_id]) == 2:
                 m.answer_on_calc(chat_id, callback_data)
@@ -34,7 +34,7 @@ def index():
                 m.tel_send_image(chat_id)
             elif txt == "/go":
                 if chat_id in memory:
-                    del memory[chat_id]
+                    del memory[chat_id]  # очистили память по ключу
                 m.tel_send_message(
                     chat_id,
                     "Этот бот умеет делать вид, что он калькулятор.\nДля начала отправь мне любое число",
@@ -44,13 +44,10 @@ def index():
                 if chat_id not in memory:
                     memory[chat_id] = []
 
-                if len(memory[chat_id]) == 1 and callback_data not in [
-                    "+",
-                    "-",
-                    "/",
-                    "*",
-                ]:
-                    m.tel_send_message(chat_id, "Уже есть число в памяти, жми на кнопку")
+                if len(memory[chat_id]) == 1:
+                    m.tel_send_message(
+                        chat_id, "Уже есть число в памяти, жми на кнопку или пиши знак"
+                    )
                 else:
                     if len(memory[chat_id]) == 0 or len(memory[chat_id]) == 2:
                         memory[chat_id].append(m.correct_num_for_memory(txt))
@@ -61,6 +58,13 @@ def index():
                     result = f"Ответ: {m.calculate(memory[chat_id][0],memory[chat_id][1],memory[chat_id][2])}"
                     m.tel_send_message(chat_id, result)
                     del memory[chat_id]
+
+            elif txt in ["+", "-", "*", "/"]:
+                if len(memory[chat_id]) == 1:
+                    memory[chat_id].append(txt)
+                else:
+                    memory[chat_id][1] = txt
+                m.answer_on_calc(chat_id, txt)
 
             else:
                 m.tel_send_message(chat_id, "Думаю ты так не думаешь")
