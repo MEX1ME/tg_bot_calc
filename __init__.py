@@ -46,7 +46,7 @@ def index():
 
                 if len(memory[chat_id]) == 1:
                     m.tel_send_message(
-                        chat_id, "Уже есть число в памяти, жми на кнопку или пиши знак"
+                        chat_id, "Уже есть число в памяти, жми на кнопку"
                     )
                 else:
                     if len(memory[chat_id]) == 0 or len(memory[chat_id]) == 2:

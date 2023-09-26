@@ -24,6 +24,19 @@ def tel_parse_buttons(message):  #
         return "NO text found-->>"
 
 
+# ###
+# def tel_parse_keyboard(message):
+#     try:
+#         callback_query = message['callback_query']
+#         chat_id = callback_query['message']['chat']['id']
+#         data = callback_query['data']
+#         message_id = callback_query['message']['message_id']
+#         return chat_id, callback_query, data, message_id
+#     except:
+#         return "NO text found-->>"
+# ###
+
+
 def tel_send_message(chat_id, text):  #
     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
     payload = {"chat_id": chat_id, "text": text}
@@ -55,6 +68,28 @@ def tel_send_calc(chat_id):  #
     }
     r = requests.post(url, json=payload)
     return r
+
+
+# ###
+# def send_keyboard(chat_id, text, reply_markup=None):
+#     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
+#     payload = {
+#         "chat_id": chat_id,
+#         "text": text,
+#         "reply_markup": {
+#             "keyboard": [
+#                 [
+#                     {"text": "Кнопка 1", "callback_data": "+"},
+#                     {"text": "Кнопка 2", "callback_data": "button2"},
+#                 ]
+#             ],
+#             "one_time_keyboard": True,
+#             "resize_keyboard": True,
+#         },
+#     }
+#     r = requests.post(url, json=payload)
+#     return r
+# ###
 
 
 def is_valid_number(num):  #
