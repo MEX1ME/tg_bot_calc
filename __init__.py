@@ -59,12 +59,6 @@ def index():
                     m.tel_send_message(chat_id, result)
                     del memory[chat_id]
 
-            elif txt in ["+", "-", "*", "/"]:
-                if len(memory[chat_id]) == 1:
-                    memory[chat_id].append(txt)
-                else:
-                    memory[chat_id][1] = txt
-                m.answer_on_calc(chat_id, txt)
 
             else:
                 m.tel_send_message(chat_id, "Думаю ты так не думаешь")
