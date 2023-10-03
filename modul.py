@@ -6,7 +6,7 @@ import config
 TOKEN = config.API_TOKEN
 
 
-def tel_parse_message(message):  #
+def tel_parse_message(message):
     try:
         chat_id = message["message"]["chat"]["id"]
         txt = message["message"]["text"]
@@ -15,107 +15,72 @@ def tel_parse_message(message):  #
         return "NO text found-->>"
 
 
-def tel_parse_buttons(message):  #
-    try:
-        chat_id = message["callback_query"]["message"]["chat"]["id"]
-        response_data = message["callback_query"]["data"]
-        return chat_id, response_data
-    except:
-        return "NO text found-->>"
-
-
-def tel_send_message(chat_id, text):  #
+def tel_send_message(chat_id, text):
     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
     payload = {"chat_id": chat_id, "text": text}
     r = requests.post(url, json=payload)
     return r
 
 
-def tel_send_calc(chat_id):  #
-    url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
-    payload = {
-        "chat_id": chat_id,
-        "text": "Что сделать с числом?",
-        "reply_markup": {
-            "inline_keyboard": [
-                [
-                    {"text": "Прибавить", "callback_data": "+"},
-                    {"text": "Вычесть", "callback_data": "-"},
-                ],
-                [
-                    {"text": "Умножить", "callback_data": "*"},
-                    {"text": "Разделить", "callback_data": "/"},
-                ],
-                [
-                    {"text": "В степень", "callback_data": "**"},
-                    {"text": "Корень степени", "callback_data": "x ** (1/y)"},
-                ],
-            ]
-        },
-    }
-    r = requests.post(url, json=payload)
-    return r
-
-
-def is_valid_number(num):  #
+def is_valid_number(num):
     pattern = r"^-?\d+([\.,]\d+)?$"
     return re.match(pattern, num) is not None
 
 
-def correct_num_for_memory(num):  #
+def correct_num_for_memory(num):
     if "," in num:
         num = num.replace(",", ".")
     num = float(num)
     return num
 
 
-def answer_on_calc(chat_id, callback_data):  #
-    if callback_data == "+":
+def answer_on_calc(chat_id, txt):
+    if txt == "Прибавить":
         tel_send_message(chat_id, "Сколько прибавить?")
-    if callback_data == "-":
+    if txt == "Вычесть":
         tel_send_message(chat_id, "Сколько вычесть?")
-    if callback_data == "*":
+    if txt == "Умножить":
         tel_send_message(chat_id, "На сколько умножить?")
-    if callback_data == "/":
+    if txt == "Разделить":
         tel_send_message(chat_id, "На сколько разделить?")
-    if callback_data == "**":
+    if txt == "В степень":
         tel_send_message(chat_id, "В какую степень возвести?")
-    if callback_data == "x ** (1/y)":
+    if txt == "Корень степени":
         tel_send_message(chat_id, "Корень какой степени извлечь?")
 
 
-def calculate(num1, sym, num2):  #
-    if sym == "+":
+def calculate(num1, sym, num2):
+    if sym == "Прибавить":
         return (
             str(num1 + num2).rstrip("0").rstrip(".")
             if num1 + num2 % 1
             else str(int(num1 + num2))
         )
-    if sym == "-":
+    if sym == "Вычесть":
         return (
             str(num1 - num2).rstrip("0").rstrip(".")
             if num1 - num2 % 1
             else str(int(num1 - num2))
         )
-    if sym == "*":
+    if sym == "Умножить":
         return (
             str(num1 * num2).rstrip("0").rstrip(".")
             if num1 * num2 % 1
             else str(int(num1 * num2))
         )
-    if sym == "/":
+    if sym == "Разделить":
         return (
             str(num1 / num2).rstrip("0").rstrip(".")
             if num1 / num2 % 1
             else str(int(num1 / num2))
         )
-    if sym == "**":
+    if sym == "В степень":
         return (
             str(num1**num2).rstrip("0").rstrip(".")
             if num1**num2 % 1
             else str(int(num1**num2))
         )
-    if sym == "x ** (1/y)":
+    if sym == "Корень степени":
         return (
             str(num1 ** (1 / num2)).rstrip("0").rstrip(".")
             if num1 ** (1 / num2) % 1
@@ -133,37 +98,30 @@ def tel_send_image(chat_id):
     r = requests.post(url, json=payload)
     return r
 
-
-# ###
-# def tel_parse_keyboard(message):
-#     try:
-#         callback_query = message['callback_query']
-#         chat_id = callback_query['message']['chat']['id']
-#         data = callback_query['data']
-#         message_id = callback_query['message']['message_id']
-#         return chat_id, callback_query, data, message_id
-#     except:
-#         return "NO text found-->>"
-# ###
-
-
-# ###
-# def send_keyboard(chat_id, text, reply_markup=None):
-#     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
-#     payload = {
-#         "chat_id": chat_id,
-#         "text": text,
-#         "reply_markup": {
-#             "keyboard": [
-#                 [
-#                     {"text": "Кнопка 1", "callback_data": "+"},
-#                     {"text": "Кнопка 2", "callback_data": "button2"},
-#                 ]
-#             ],
-#             "one_time_keyboard": True,
-#             "resize_keyboard": True,
-#         },
-#     }
-#     r = requests.post(url, json=payload)
-#     return r
-# ###
+    
+def tel_send_calculator(chat_id):
+    url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
+    payload = {
+        "chat_id": chat_id,
+        "text": "Что сделать с числом?",
+        "reply_markup": {
+            "keyboard": [
+                [
+                    {"text": "Прибавить"},
+                    {"text": "Вычесть"},
+                ],
+                [
+                    {"text": "Умножить"},
+                    {"text": "Разделить"},
+                ],
+                [
+                    {"text": "В степень"},
+                    {"text": "Корень степени"},
+                ],
+            ],
+            "one_time_keyboard": True,
+            "resize_keyboard": True
+        },
+    }
+    r = requests.post(url, json=payload)
+    return r
