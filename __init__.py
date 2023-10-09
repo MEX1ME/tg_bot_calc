@@ -34,18 +34,16 @@ def index():
                     memory[chat_id] = []
 
                 if len(memory[chat_id]) == 1:
-                    m.tel_send_message(
-                        chat_id, "Уже есть число в памяти, жми на кнопку"
-                    )
+                    m.tel_send_calculator(chat_id, "Уже есть число в памяти. Что сделать с числом?")
                 else:
                     if len(memory[chat_id]) == 0 or len(memory[chat_id]) == 2:
                         memory[chat_id].append(m.correct_num_for_memory(txt))
                     if len(memory[chat_id]) == 1:
-                        m.tel_send_calculator(chat_id)
+                        m.tel_send_calculator(chat_id, "Что сделать с числом?")
 
                 if len(memory[chat_id]) == 3:
                     result = f"Ответ: {m.calculate(memory[chat_id][0],memory[chat_id][1],memory[chat_id][2])}"
-                    m.tel_send_message(chat_id, result)
+                    m.answer_calculate_and_hide_keyboard(chat_id, result)
                     del memory[chat_id]
 
             elif chat_id in memory:
@@ -64,6 +62,11 @@ def index():
 
                     if len(memory[chat_id]) == 2:
                         m.answer_on_calc(chat_id, txt)
+
+            
+                elif txt == "Стереть":
+                    del memory[chat_id]
+                    m.tel_send_message(chat_id, "Память калькулятора очищена")
 
             else:
                 m.tel_send_message(chat_id, "Думаю ты так не думаешь")

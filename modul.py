@@ -22,6 +22,17 @@ def tel_send_message(chat_id, text):
     return r
 
 
+def answer_calculate_and_hide_keyboard(chat_id, text):
+    url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
+    payload = {
+        "chat_id": chat_id,
+        "text": text,
+        "reply_markup": {"remove_keyboard": True}
+    }
+    response = requests.post(url, json=payload)
+    return response.json()
+
+
 def is_valid_number(num):
     pattern = r"^-?\d+([\.,]\d+)?$"
     return re.match(pattern, num) is not None
@@ -99,11 +110,11 @@ def tel_send_image(chat_id):
     return r
 
     
-def tel_send_calculator(chat_id):
+def tel_send_calculator(chat_id, text):
     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
     payload = {
         "chat_id": chat_id,
-        "text": "Что сделать с числом?",
+        "text": text,
         "reply_markup": {
             "keyboard": [
                 [
@@ -118,10 +129,15 @@ def tel_send_calculator(chat_id):
                     {"text": "В степень"},
                     {"text": "Корень степени"},
                 ],
+                [
+                    {"text": "Стереть"},
+                ],
             ],
             "one_time_keyboard": True,
-            "resize_keyboard": True
+            "resize_keyboard": True,
+            "remove_keyboard": True
         },
     }
     r = requests.post(url, json=payload)
     return r
+
