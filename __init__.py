@@ -71,6 +71,9 @@ def index():
                 elif txt == "Стереть":
                     del memory[chat_id]
                     m.tel_send_message(chat_id, "Память калькулятора очищена")
+                else:
+                    del memory[chat_id]
+                    m.tel_send_message(chat_id, "Начни сначала, память калькулятора очищена")
 
             else:
                 m.tel_send_message(chat_id, "Думаю ты так не думаешь")
