@@ -42,9 +42,13 @@ def index():
                         m.tel_send_calculator(chat_id, "Что сделать с числом?")
 
                 if len(memory[chat_id]) == 3:
-                    result = f"Ответ: {m.calculate(memory[chat_id][0],memory[chat_id][1],memory[chat_id][2])}"
-                    m.answer_calculate_and_hide_keyboard(chat_id, result)
-                    del memory[chat_id]
+                    if memory[chat_id][1] == "Разделить" and memory[chat_id][2] == 0:
+                        del memory[chat_id]
+                        m.tel_send_message(chat_id, "Очень смешно.. Память калькулятора очищена")
+                    else:
+                        result = f"Ответ: {m.calculate(memory[chat_id][0],memory[chat_id][1],memory[chat_id][2])}"
+                        m.answer_calculate_and_hide_keyboard(chat_id, result)
+                        del memory[chat_id]
 
             elif chat_id in memory:
                 if txt in [
