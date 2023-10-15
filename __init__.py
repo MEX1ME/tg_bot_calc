@@ -45,6 +45,9 @@ def index():
                     if memory[chat_id][1] == "Разделить" and memory[chat_id][2] == 0:
                         del memory[chat_id]
                         m.tel_send_message(chat_id, "Очень смешно.. Память калькулятора очищена")
+                    elif memory[chat_id][1] == "В степень" and ((memory[chat_id][2] % 1 == 0 and memory[chat_id][2]>=100) or (memory[chat_id][2] % 1 > 0 and memory[chat_id][2]>=10)):
+                        del memory[chat_id]
+                        m.tel_send_message(chat_id, "Давай сначала, слишком долго считать")
                     else:
                         result = f"Ответ: {m.calculate(memory[chat_id][0],memory[chat_id][1],memory[chat_id][2])}"
                         m.answer_calculate_and_hide_keyboard(chat_id, result)
@@ -91,3 +94,6 @@ def catch_all(path):
 
 if __name__ == "__main__":
     app.run(threaded=True)
+
+
+

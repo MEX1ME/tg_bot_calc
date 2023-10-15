@@ -1,7 +1,7 @@
 import requests
 import re
 import config
-
+import math
 
 TOKEN = config.API_TOKEN
 
@@ -62,41 +62,20 @@ def answer_on_calc(chat_id, txt):
 
 def calculate(num1, sym, num2):
     if sym == "Прибавить":
-        return (
-            str(num1 + num2).rstrip("0").rstrip(".")
-            if num1 + num2 % 1
-            else str(int(num1 + num2))
-        )
-    if sym == "Вычесть":
-        return (
-            str(num1 - num2).rstrip("0").rstrip(".")
-            if num1 - num2 % 1
-            else str(int(num1 - num2))
-        )
-    if sym == "Умножить":
-        return (
-            str(num1 * num2).rstrip("0").rstrip(".")
-            if num1 * num2 % 1
-            else str(int(num1 * num2))
-        )
-    if sym == "Разделить":
-        return (
-            str(num1 / num2).rstrip("0").rstrip(".")
-            if num1 / num2 % 1
-            else str(int(num1 / num2))
-        )
-    if sym == "В степень":
-        return (
-            str(num1**num2).rstrip("0").rstrip(".")
-            if num1**num2 % 1
-            else str(int(num1**num2))
-        )
-    if sym == "Корень степени":
-        return (
-            str(num1 ** (1 / num2)).rstrip("0").rstrip(".")
-            if num1 ** (1 / num2) % 1
-            else str(int(num1 ** (1 / num2)))
-        )
+        result = num1 + num2
+    elif sym == "Вычесть":
+        result = num1 - num2
+    elif sym == "Умножить":
+        result = num1 * num2
+    elif sym == "Разделить":
+        result = num1 / num2
+    elif sym == "В степень":
+        result = pow(num1, num2)
+    elif sym == "Корень степени":
+        result = math.pow(num1, 1 / num2)
+
+    formatted_result = str(result).rstrip("0").rstrip(".")
+    return formatted_result
 
 
 def tel_send_image(chat_id):
